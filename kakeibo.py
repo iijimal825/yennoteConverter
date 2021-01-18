@@ -31,6 +31,17 @@ class Analyze:
         else:
             other_carfare += int(row[3])
 
+    def read_csv(self, incsv):
+        df_csv = pd.read_csv(incsv)
+	df_csv = df_csv.query('金額 > 0')
+	print(df_csv)
+	return df_csv
+
+
+    def sum(self, df, user):
+        print(df[df.
+        pass
+
     def analyze_data(self, incsv):
         common_food = 0
         tomoko_food = 0
@@ -237,17 +248,9 @@ class Analyze:
                       other_edu, other_hobby, other_clothing, other_med,\
                       other_gift, other_social, other_cost, "=SUM(B7:N7)",\
                       ".", ".", "=O7"]
- #   sum_list = ['=SUM(B2:B7)', '=SUM(C2:C7)', '=SUM(D2:D7)', '=SUM(E2:E7)', \
- #               '=SUM(F2:F7)', '=SUM(G2:G7)', '=SUM(H2:H7)', '=SUM(I2:I7)', \
- #               '=SUM(J2:J7)', '=SUM(K2:K7)', '=SUM(L2:L7)', '=SUM(M2:M7)', \
- #               '=SUM(N2:N7)', '=SUM(O2:O7)', '.', '=SUM(Q2:Q7)', '=SUM(R2:R7)']
         data_frame_list = [common_list, tomoko_list, luna_list, \
                            yukimaru_list, ham_list, other_list, self.sum_list]
 
-#        col_list = ['食費', '生活雑貨', '住居費', '交通費', '通信費', '光熱費',\
-#                    '教育教養費', '娯楽費', '被服費', '医療費', 'ギフト', '交際費', 'その他', '合計',\
-#                '.', 'るな', 'ともこ']
-#    index_list = ['共通', 'ともこ', 'るな', 'ゆきまる', 'ハム', 'その他', '合計']
     # 出力ファイル名の取得
         outxlsx = os.path.splitext(incsv)[0] + '_done.xlsx'
         df = pd.DataFrame(data_frame_list, index=self.index_list, columns=self.col_list)
@@ -255,13 +258,6 @@ class Analyze:
         with pd.ExcelWriter(outxlsx) as wf:
             df.to_excel(wf, sheet_name='sheet1')
         return outxlsx
- #   with open(outcspy
- # v, 'w') as wf:
- #       writer = csv.writer(f)
- #       writer.writerow(['#', '食費', '生活雑貨', '住居費', '交通費', '通信費', '光熱費',\
- #                        '教育教養費', '娯楽費', '被服費', '医療費', 'ギフト', '交際費', 'その他'])
- #       writer.writerow(['a', 'b', 'c'])
-
 
 # 参照ボタンのイベント
 # button1クリック時の処理
