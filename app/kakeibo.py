@@ -2,11 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import os
-import tkinter as tk
-from tkinter import ttk
-from tkinter import filedialog
-from tkinter import messagebox
+#import tkinter as tk
+#from tkinter import ttk
+#from tkinter import filedialog
+#from tkinter import messagebox
 import pandas as pd
+from django.core.files import File
+from django.conf import settings
+from .models import FileUpload
 
 
 class Analyze:
@@ -27,7 +30,12 @@ class Analyze:
 
     def read_csv(self, incsv):
         # yen-note csv を DataFrame に変換する
-        df_csv = pd.read_csv(incsv, encoding='shift-jis')
+        try:
+            # utf-8に対応
+            df_csv = pd.read_csv(incsv)
+        except UnicodeDecodeError:
+            # cp932に対応
+            df_csv = pd.read_csv(incsv, encoding='cp932')
         # 支出のみ抽出する
         df_expence = df_csv.query('金額 < 0')
         return df_expence
@@ -84,7 +92,7 @@ class Analyze:
             sum_list.append(str_sum)
         return sum_list
 
-    def run(self, incsv):
+    def run(self, incsv, pk):
         df = self.read_csv(incsv)
         # カテゴリごとに集計
         self.sum_dict = {}
@@ -121,67 +129,19 @@ class Analyze:
         for i, cat_sum_list in enumerate(self.output_list):
             cat_sum_list.append(row_sum_list[i])
         self.user_list.append('合計')
-        # 出力ファイル名の取得
-        outxlsx = os.path.splitext(incsv)[0] + '_done.xlsx'
+        # 解析後DataFrameを作成
         df = pd.DataFrame(self.output_list, index=self.cat_list, columns=self.user_list)
-        with pd.ExcelWriter(outxlsx) as wf:
+        
+        # 出力ファイルの作成
+        # mediaルートとFileUploadモデルに渡す相対パス
+        outxlsx = os.path.join('xlsx', os.path.splitext(os.path.basename(incsv))[0] + '_done.xlsx')
+        # ファイルを書き込む際に渡す絶対パス
+        media_outxlsx = os.path.join(settings.MEDIA_ROOT, outxlsx)
+        # Data Frame の書き込み
+        with pd.ExcelWriter(media_outxlsx) as wf:
             df.to_excel(wf, sheet_name='sheet1')
-        return outxlsx
-
-
-# 参照ボタンのイベント
-# button1クリック時の処理
-def button1_clicked():
-    fTyp = [("", "*")]
-    iDir = os.path.abspath(os.path.dirname(__file__))
-    filepath = filedialog.askopenfilename(filetypes=fTyp, initialdir=iDir)
-    file1.set(filepath)
-
-
-# button2クリック時の処理
-def button2_clicked():
-    incsv = file1.get()
-    analyze = Analyze()
-    outxlsx = analyze.run(incsv)
-    messagebox.showinfo('正常終了', u'出力ファイルは\n' + outxlsx)
-
-
-if __name__ == '__main__':
-    # rootの作成
-    root = tk.Tk()
-    root.title('FileReference Tool')
-    root.resizable(False, False)
-
-    # Frame1の作成
-    frame1 = ttk.Frame(root, padding=10)
-    frame1.grid()
-
-    # 参照ボタンの作成
-    button1 = ttk.Button(root, text=u'参照', command=button1_clicked)
-    button1.grid(row=0, column=3)
-
-    # ラベルの作成
-    # 「ファイル」ラベルの作成
-    s = tk.StringVar()
-    s.set('ファイル>>')
-    label1 = ttk.Label(frame1, textvariable=s)
-    label1.grid(row=0, column=0)
-
-    # 参照ファイルパス表示ラベルの作成
-    file1 = tk.StringVar()
-    file1_entry = ttk.Entry(frame1, textvariable=file1, width=50)
-    file1_entry.grid(row=0, column=2)
-
-    # Frame2の作成
-    frame2 = ttk.Frame(root, padding=(0, 5))
-    frame2.grid(row=1)
-
-    # Startボタンの作成
-    button2 = ttk.Button(frame2, text='Start', command=button2_clicked)
-    button2.pack(side=tk.LEFT)
-
-    # Cancelボタンの作成
-    button3 = ttk.Button(frame2, text='Cancel', command=quit)
-    button3.pack(side=tk.LEFT)
-
-    root.mainloop()
+        # DB の更新
+        rec = FileUpload.objects.get(id=pk)
+        rec.analyzed_file = outxlsx
+        rec.save()
+        return df

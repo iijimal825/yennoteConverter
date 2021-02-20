@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
        <head>
-              <title>テストアプリ</title>
+              <title>Yency - 家計簿アプリ</title>
        </head>
        <body>
               <h2>CSVファイルリスト</h2>
+              <a href="{% url 'app:new_file' %}">アップロード</a>
               <br>
               {% if file_obj %}
                      {% for file in file_obj %}
@@ -12,6 +13,7 @@
                                    {{ file.created_at }}
                                    {{ file.title }}
                                    <a href="{% url 'app:detail' pk=file.id %}">詳細</a>
+                                   <a href="{% url 'app:analyze' pk=file.id %}">解析実行</a>
                             </p>
                      {% endfor %}
               {% else %}

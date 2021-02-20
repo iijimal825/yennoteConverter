@@ -5,15 +5,14 @@
         </head>
         <body>
 
-            <h2>CSVファイル内容詳細</h2>
+            <h2>解析結果</h2>
             <br>
 
             <a href="{% url 'app:index' %}">戻る</a>
             <br>
 
             <!-- 各インスタンス属性の要素を取得 -->
-            <p>アップロード日：{{ file_value.created_at }}</p>
-            <p>ダウンロード：<a href="{{ file_value.upload_file.url }}">{{file_value.upload_file_name }}</a></p>
+            <p>ダウンロード：<a href="{{ file_value.analyzed_file.url }}">{{file_value.analyzed_file_name }}</a></p>
             <br>
 
             <!-- 読み込んだCSVファイルをテーブル形式で表示 -->
