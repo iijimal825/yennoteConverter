@@ -92,7 +92,40 @@ class Analyze:
             sum_list.append(str_sum)
         return sum_list
 
+    def make_df_excel(self):
+        # 合計行を作成する
+        sum_list = self.edit_sum_row(len(self.cat_list), len(self.user_list))
+        self.output_list.append(sum_list)
+        self.cat_list.append('合計')
+        # 支払者行を作成する
+        sum_row_num = len(self.cat_list)
+        for i, (payer, ratio_list) in enumerate(self.payer_dict.items()):
+            sum_list = self.edit_ratio_row(sum_row_num, len(self.user_list), ratio_list)
+            self.output_list.append(sum_list)
+            self.cat_list.append(payer)
+        # 合計列を作成する
+        row_sum_list = self.edit_sum_col(len(self.cat_list), len(self.user_list))
+        for i, cat_sum_list in enumerate(self.output_list):
+            cat_sum_list.append(row_sum_list[i])
+        self.user_list.append('合計')
+        # 解析後DataFrameを作成
+        df = pd.DataFrame(self.output_list, index=self.cat_list, columns=self.user_list)
+        return df
+
+    def make_df_gui(self):
+        df = pd.DataFrame(self.output_list, index=self.cat_list, columns=self.user_list)
+        # 合計行を作成する
+        df.loc['合計']= df.sum()
+        # 支払者行を作成する
+        for payer, ratio_list in self.payer_dict.items():
+            df_ratio = pd.DataFrame(ratio_list, index=self.user_list).transpose()
+            df.loc[payer] = df_ratio.iloc[0] * df.loc['合計']   
+        # 合計列を作成する
+        df['合計'] = df.sum(axis=1)
+        return df
+
     def run(self, incsv, pk):
+        # csv を Data Frame へ変換
         df = self.read_csv(incsv)
         # カテゴリごとに集計
         self.sum_dict = {}
@@ -114,34 +147,23 @@ class Analyze:
                 sum_list = self.sum_normal(df_cat)
             self.sum_dict[category] = sum_list
             self.output_list.append(sum_list)
-        # 合計行を作成する
-        sum_list = self.edit_sum_row(len(self.cat_list), len(self.user_list))
-        self.output_list.append(sum_list)
-        self.cat_list.append('合計')
-        # 支払者行を作成する
-        sum_row_num = len(self.cat_list)
-        for i, (payer, ratio_list) in enumerate(self.payer_dict.items()):
-            sum_list = self.edit_ratio_row(sum_row_num, len(self.user_list), ratio_list)
-            self.output_list.append(sum_list)
-            self.cat_list.append(payer)
-        # 合計列を作成する
-        row_sum_list = self.edit_sum_col(len(self.cat_list), len(self.user_list))
-        for i, cat_sum_list in enumerate(self.output_list):
-            cat_sum_list.append(row_sum_list[i])
-        self.user_list.append('合計')
-        # 解析後DataFrameを作成
-        df = pd.DataFrame(self.output_list, index=self.cat_list, columns=self.user_list)
         
+        # Data Flame for GUI を作成
+        df_gui = self.make_df_gui()
+        # Data Frame for excel を作成
+        df_excel = self.make_df_excel()
+
         # 出力ファイルの作成
         # mediaルートとFileUploadモデルに渡す相対パス
         outxlsx = os.path.join('xlsx', os.path.splitext(os.path.basename(incsv))[0] + '_done.xlsx')
         # ファイルを書き込む際に渡す絶対パス
         media_outxlsx = os.path.join(settings.MEDIA_ROOT, outxlsx)
         # Data Frame の書き込み
-        with pd.ExcelWriter(media_outxlsx) as wf:
-            df.to_excel(wf, sheet_name='sheet1')
+        with pd.ExcelWriter(media_outxlsx) as wf_excel:
+            df_excel.to_excel(wf_excel, sheet_name='sheet1')
         # DB の更新
         rec = FileUpload.objects.get(id=pk)
         rec.analyzed_file = outxlsx
         rec.save()
-        return df
+
+        return df_gui

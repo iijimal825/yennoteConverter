@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+       <head>
+              <title>Yency - 家計簿アプリ</title>
+              <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+              <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+              <link rel="preconnect" href="https://fonts.gstatic.com">
+              <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@1,900&display=swap" rel="stylesheet">
+              <link rel="stylesheet" href="{% static 'css/yency.css' %}">
+       </head>
+       <body>
+              <div class="page-header">
+                     <h2 style="display:inline;"><a href="/"><span>Y</span>ency</a></h2>
+                     <p style="display:inline;">Convert CSV (by yen-note for Windows 10) into EXCEL.</p>
+              </div>
+              <ul class="topnav">
+                     <li><a href="/">Home</a></li>
+                     <li><a href="{% url 'app:new_file' %}">Upload</a></li>
+                     <!--<li class="loginuser">logout</li>-->
+                     <!--<li class="loginuser">username: <span>{{ user.username }}</span></li>-->
+              </ul>
+              {% block content %}
+              {% endblock %}
+              </div>
+       </body>
+</html>
