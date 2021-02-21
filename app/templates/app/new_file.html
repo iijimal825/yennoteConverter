@@ -1,0 +1,29 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+    <a href="{% url 'app:index' %}">戻る</a>
+    <br>
+    <form enctype="multipart/form-data" action="{% url 'app:new_file' %}" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <button class="btn_item" type="submit">保存</button>
+    </form>
+{% endblock %}
+
+<!--
+<!doctype html>
+<html>
+        <head>
+            <title> Yency - 家計簿アプリ</title>
+        </head>
+        <body>
+            <a href="{% url 'app:index' %}">TOPへ戻る</a>
+            <br>
+            <form enctype="multipart/form-data" action="{% url 'app:new_file' %}" method="POST">
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit">保存</button>
+            </form>
+        </body>
+</html>
+-->

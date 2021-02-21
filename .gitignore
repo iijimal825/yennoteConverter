@@ -1,0 +1,12 @@
+/yency/*.pyc
+/app/*.pyc
+/yency/settings_local.py
+/yency/__pycache__
+/app/__pycache__
+/app/migrations/__pycache__
+/app/migrations/*.py
+__pycache__
+db.sqlite3
+/static
+/media
+.DS_Store

@@ -1,0 +1,131 @@
+body {
+	background-color:#f5f5f5;
+    font-family:"Yu Gothic", "游ゴシック";
+    color: #364f6b;
+    font-size: 16pt;
+}
+
+.page-header {
+    background-color: #3fc1c9;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 5px 5px 5px 30px;
+    color: #364f6b;
+    font-family: 'Libre Franklin', sans-serif;
+    text-decoration: none;
+}
+
+.page-header h2, .page-header h2 a, .page-header h2 a:visited, .page-header h2 a:active {
+    font-size: 40pt;
+    margin-right: 20px;
+    color: #364f6b;
+}
+
+span {
+    color: #e04b77;
+}
+
+.page-header p {
+    font-size: 12pt;
+}
+
+ul.topnav {
+	overflow: hidden;
+    font-family: 'Libre Franklin', sans-serif;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	background-color: #3fc1c9;
+}
+
+ul.topnav li {
+	float: left;  /*指定した要素を左に寄せる*/
+}
+
+ul.topnav li a {
+	display: block;
+	padding: 12px 16px;
+	text-align: center;
+	text-decoration: none;
+    color: #364f6b;
+}
+ul.topnav li a:hover:not(.active) {
+	background-color: #89e1e6;
+    color: #e04b77;
+}
+ul.topnav li.loginuser {
+	float: right;
+    display: block;
+	padding: 12px 16px;
+	text-align: center;
+	text-decoration: none;
+    color: #364f6b;
+}
+
+/*ディスプレイで横幅480px以下の場合、要素の配置を指定しない*/
+@media screen and (max-width: 480px) {
+	ul.topnav, ul.topnav li {
+		float: none;
+	}
+}
+
+.list {
+    padding-left: 40px;
+    padding-right: 40px;
+    margin-bottom: 70px;
+}
+
+.list h3, .list h3:visited {
+    color: #fc5185;
+    font-family: 'Libre Franklin', sans-serif;
+}
+.btn_item {
+    display: inline-block;
+    font-size: 12pt;
+    font-weight: bold;
+    padding: 5px 15px;
+    text-decoration: none;
+    background: #e04b77;
+    color: #f5f5f5;
+    border: 1px solid #e04b77;
+    border-radius: 5px;
+}
+
+.btn_item:hover {
+    transition: all .2s linear;
+    background: #f5f5f5;
+    color: #e04b77;
+}
+
+.btn_return {
+    display: inline-block;
+    font-size: 12pt;
+    font-weight: bold;
+    padding: 5px 15px;
+    text-decoration: none;
+    background: #364f6b;
+    color: #f5f5f5;
+    border: 1px solid #364f6b;
+    border-radius: 5px;
+}
+  
+.btn_return:hover {
+    transition: all .2s linear;
+    background: #f5f5f5;
+    color: #364f6b;
+}  
+
+.list table {
+    border-collapse: collapse;
+    border: 3px solid #ccc;
+    line-height: 1.5;
+}
+
+.list table th {
+    width: 150px;
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    background: #364f6b;
+    color: #f5f5f5;
+}

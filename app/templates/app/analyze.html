@@ -1,0 +1,68 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+    <div class="list">
+        <h2>解析結果</h2>
+        <br>
+        <a href="{% url 'app:index' %}">戻る</a>
+        <br>
+        <!-- 各インスタンス属性の要素を取得 -->
+        <p>ダウンロード：<a href="{{ file_value.analyzed_file.url }}">{{file_value.analyzed_file_name }}</a></p>
+        <br>
+        <!-- 読み込んだCSVファイルをテーブル形式で表示 -->
+        <table border="1">
+            <tr>
+                <td>index</td>
+                {% for columns, item in df.iteritems %}
+                    <th>{{ columns }}</th>
+                {% endfor %}
+            </tr>
+            {% for index, rows in df.iterrows %}
+                <tr>
+                    <th>{{ index }}</th>
+                    {% for row in rows %}
+                        <td>{{ row }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
+
+<!--
+<!doctype html>
+<html>
+        <head>
+                <title>Yency - 家計簿アプリ</title>
+        </head>
+        <body>
+
+            <h2>解析結果</h2>
+            <br>
+
+            <a href="{% url 'app:index' %}">戻る</a>
+            <br>
+
+            <p>ダウンロード：<a href="{{ file_value.analyzed_file.url }}">{{file_value.analyzed_file_name }}</a></p>
+            <br>
+
+            <table border="1">
+                <tr>
+                    <td>index</td>
+                    {% for columns, item in df.iteritems %}
+                        <th>{{ columns }}</th>
+                    {% endfor %}
+                </tr>
+                {% for index, rows in df.iterrows %}
+                    <tr>
+                        <th>{{ index }}</th>
+                        {% for row in rows %}
+                            <td>{{ row }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+
+        </body>
+</html>
+-->
