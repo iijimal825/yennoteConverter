@@ -1,3 +1,6 @@
 django==3.1.6
 django-cleanup==5.1.0
 django-pandas==0.6.4
+python-dotenv
+openpyxl==3.0.6
+mysqlclient==2.0.3
