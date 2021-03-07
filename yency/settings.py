@@ -25,6 +25,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'yennoteConverter.pythonanywhere.com']
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get('yency_SECRET_KEY') 
 
 # Application definition
 

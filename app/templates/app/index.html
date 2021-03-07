@@ -11,7 +11,6 @@
                                    <a class="btn_item" href="{% url 'app:detail' pk=file.id %}" role="button">詳細</a>
                                    <a class="btn_item" href="{% url 'app:analyze' pk=file.id %}" role="button">解析実行</a>
                             </div>
-                            <br>
                      {% endfor %}
               {% else %}
                      <h3>現在ファイルはありません</h3>

@@ -1,13 +1,22 @@
 {% extends 'app/base.html' %}
 
 {% block content %}
-    <a href="{% url 'app:index' %}">戻る</a>
-    <br>
-    <form enctype="multipart/form-data" action="{% url 'app:new_file' %}" method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <button class="btn_item" type="submit">保存</button>
-    </form>
+    <div class="list">
+        <h2>新しいファイルを登録</h2>
+        <div style="text-align: right;">
+            <a class="btn_return" href="{% url 'app:index' %}">戻る</a>
+        </div>
+        <form enctype="multipart/form-data" action="{% url 'app:new_file' %}" method="POST">
+            {% csrf_token %}
+            <div>
+                <label for="title">Title: {{ form.title }}</label>
+            </div>
+            <div>
+                <label for="file">{{ form.upload_file }}</label>
+            </div>
+            <button class="btn_item" type="submit">保存</button>
+        </form>
+    </div>
 {% endblock %}
 
 <!--
